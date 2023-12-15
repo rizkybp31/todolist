@@ -28,7 +28,7 @@ const AddTodo = ({ onAdd }) => {
   };
 
   return (
-    <div className="container px-6 mt-6 flex flex-col">
+    <div className="container px-6 mt-6 flex flex-col max-w-3xl mx-auto">
       <h1 className="text-xl font-semibold mb-4">Add new Todo</h1>
       <input
         type="text"
