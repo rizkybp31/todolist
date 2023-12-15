@@ -1,26 +1,43 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { addDoc, collection } from "firebase/firestore";
 import db from "./firebase";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { auth } from "./firebase";
 
 const AddTodo = ({ onAdd }) => {
   const [newTodo, setNewTodo] = useState("");
-  const [isPending, setIsPending] = useState(false)
+  const [isPending, setIsPending] = useState(false);
+  const [reference, setReference] = useState("");
   const history = useHistory();
+
+  const getUid = () => {
+    const user = auth.currentUser;
+    if (user) {
+      const userReference = "/" + user.uid;
+      setReference(userReference);
+    } else {
+      history.push('/')
+      console.log("Not valid user");
+    }
+  };
+
+  useEffect(() => {
+    getUid();
+  })
 
   const handleAddTodo = async () => {
     try {
       if (newTodo.trim() !== "") {
         setIsPending(true);
         const timestamp = new Date();
-        const docRef = await addDoc(collection(db, "todolist"), {
+        const docRef = await addDoc(collection(db, reference), {
           todo: newTodo,
           timestamp: timestamp.toISOString(),
         });
-        setIsPending(false)
-        history.push('/');
+        setIsPending(false);
+        history.push("/home");
         onAdd({ id: docRef.id, todo: newTodo, timestamp });
-        setNewTodo('');
+        setNewTodo("");
       }
     } catch (err) {
       console.error("Error adding todo: ", err.message);
@@ -36,11 +53,11 @@ const AddTodo = ({ onAdd }) => {
         onChange={(e) => setNewTodo(e.target.value)}
         className="border-2 px-2 py-2 rounded-lg"
       />
-      <button 
+      <button
         onClick={handleAddTodo}
         className="border-2 w-1/3 bg-green-600 mt-4 px-3 py-2 rounded-lg border-transparent text-white"
       >
-        { isPending ? 'Adding...' : 'Add Todo' }
+        {isPending ? "Adding..." : "Add Todo"}
       </button>
     </div>
   );

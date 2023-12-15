@@ -1,43 +1,52 @@
 import { collection, onSnapshot, doc, orderBy, query, deleteDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import db from "./firebase";
-
+import { auth } from './firebase';
+import { useHistory } from "react-router-dom";
 
 const TodoList = () => {
   const [data, setData] = useState([]);
   const [isPending, setIsPending] = useState(true);
+  const [reference, setReference] = useState('');
   const [error, setError] = useState("");
+  const history = useHistory();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const q = query(collection(db, "todolist"), orderBy("timestamp", "desc"));
-        onSnapshot(q, (snapshot) => {
-          setData(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-          setIsPending(false);
-        });
+        const user = auth.currentUser;
+        if (user) {
+          const userReference = '/' + user.uid;
+          setReference(userReference);
+          const q = query(collection(db, userReference), orderBy("timestamp", "desc"));
+          onSnapshot(q, (snapshot) => {
+            setData(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+            setIsPending(false);
+          });
+        } else {
+          history.push('/');
+        }
       } catch (err) {
         setError(err.message);
       }
     };
 
     fetchData();
-
-  }, []);
+  }, [history]);
 
   const handleOnClick = async (event) => {
     const id = event.currentTarget.id;
     try {
-      const todoRef = doc(db, 'todolist', id);
-    await deleteDoc(todoRef);
-    }catch (error) {
-      console.log(error.message)
+      const todoRef = doc(db, reference, id);
+      await deleteDoc(todoRef);
+    } catch (error) {
+      console.log(error.message);
     }
-  }
+  };
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">Todo</h1>
+      <h1 className="text-xl font-semibold mb-4">Todo</h1>
       {isPending && <div>Loading...</div>}
       <div className="flex flex-col gap-4">
         {data.map((list) => (

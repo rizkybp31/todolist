@@ -3,6 +3,9 @@ import Navbar from "./Navbar";
 import Home from "./Home";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom/cjs/react-router-dom.min";
 import AddTodo from "./AddTodo";
+import Login from "./Login";
+import Welcome from "./Welcome";
+import SignUp from "./SignUp";
 
 function App() {
   return (
@@ -10,7 +13,16 @@ function App() {
       <div className="app">
         <Navbar />
         <Switch>
-          <Route exact path='/'>
+        <Route exact path='/'>
+            <Welcome />
+          </Route>
+          <Route path='/login'>
+            <Login />
+          </Route>
+          <Route path='/signup'>
+            <SignUp />
+          </Route>
+          <Route path='/home'>
             <Home />
           </Route>
           <Route path='/add'>
