@@ -46,12 +46,12 @@ const TodoList = () => {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold mb-4">Todo</h1>
+      <h1 className="text-white text-xl font-semibold mb-4">Todo</h1>
       {isPending && <div>Loading...</div>}
       <div className="flex flex-col gap-4">
         {data.map((list) => (
           <div className="flex justify-between border-2 px-2 py-4 rounded-lg pr-4" key={list.id}>
-            <p>{list.todo}</p>
+            <p className="text-white">{list.todo}</p>
             <input type="checkbox" onClick={handleOnClick} id={list.id} />
           </div>
         ))}
