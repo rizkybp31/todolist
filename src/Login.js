@@ -26,7 +26,7 @@ const Login = () => {
     <div className="bg-[conic-gradient(at_top_left,_var(--tw-gradient-stops))] from-gray-900 to-gray-600 bg-gradient-to-r">
     
       <div className="container h-screen flex flex-col justify-center px-6 py-4 max-w-3xl mx-auto">
-        <div className="flex items-center mx-auto w-3/5 mb-10 justify-between">
+        <div className="block w-full mt-4 mx-auto mb-10 md:w-3/4">
           <Link
             to="./"
             className="flex border-2 justify-center items-center w-10 h-10 rounded-full text-white"
@@ -39,7 +39,7 @@ const Login = () => {
         </h1>
         <form
           onSubmit={loginUser}
-          className="border-2 flex flex-col gap-4 px-4 py-8 rounded-lg self-center w-[420px]"
+          className="border-2 flex flex-col gap-4 px-4 py-8 rounded-lg self-center md:w-[420px]"
         >
           <input
             type="email"
