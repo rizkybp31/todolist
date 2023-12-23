@@ -35,8 +35,8 @@ const AddTodo = ({ onAdd }) => {
           todo: newTodo,
           timestamp: timestamp.toISOString(),
         });
-        setIsPending(false);
         history.push("/home");
+        setIsPending(false);
         onAdd({ id: docRef.id, todo: newTodo, timestamp });
         setNewTodo("");
       }
@@ -58,7 +58,8 @@ const AddTodo = ({ onAdd }) => {
         />
         <button
           onClick={handleAddTodo}
-          className="border-2 w-1/3 bg-red-600 mt-4 px-3 py-2 rounded-lg border-transparent text-white"
+          className="border-2 w-1/3 bg-red-600 mt-4 px-3 py-2 rounded-lg border-transparent text-white hover:bg-red-300"
+          disabled={isPending}
         >
           {isPending ? "Adding..." : "Add Todo"}
         </button>

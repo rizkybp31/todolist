@@ -8,16 +8,20 @@ const Login = () => {
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
+  const [isPending, setIsPending] = useState(false);
 
   const loginUser = (e) => {
     e.preventDefault();
-
+    setIsPending(true);
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         history.push("/home");
       })
       .catch((err) => {
+        setError("Incorrect email and password");
+        setIsPending(false);
         console.log(err.message);
       });
   };
@@ -25,7 +29,7 @@ const Login = () => {
   return (
     <div className="bg-[conic-gradient(at_top_left,_var(--tw-gradient-stops))] from-gray-900 to-gray-600 bg-gradient-to-r">
     
-      <div className="container h-screen flex flex-col justify-center px-6 py-4 max-w-3xl mx-auto">
+      <div className="container h-screen flex flex-col justify-center px-6 py-4 max-w-3xl mx-auto pb-10">
         <div className="block w-full mt-4 mx-auto mb-10 md:w-3/4">
           <Link
             to="./"
@@ -59,8 +63,9 @@ const Login = () => {
             className="border-2 px-2 py-2 rounded-lg"
             required
           />
-          <button className="text-white border-transparent border-2 px-4 py-2 rounded-lg bg-red-600 mt-6">
-            Login
+          { error ? <p className="text-red-600">{ error }⚠️</p> : null}
+          <button className="text-white border-transparent border-2 px-4 py-2 rounded-lg bg-red-600 mt-6 hover:bg-red-300" disabled={isPending}>
+            { isPending ? "Loading..." : "Login" }
           </button>
         </form>
       </div>

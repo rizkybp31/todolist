@@ -8,16 +8,18 @@ const SignUp = () => {
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isPending, setIsPending] = useState(false)
 
   const createAccount = async (e) => {
     e.preventDefault();
-
+    setIsPending(true);
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         history.push("/login");
       })
       .catch((err) => {
+        setIsPending(false);
         console.log(err.message);
       });
   };
@@ -25,7 +27,7 @@ const SignUp = () => {
   return (
     <div className="bg-[conic-gradient(at_top_left,_var(--tw-gradient-stops))] from-gray-900 to-gray-600 bg-gradient-to-r">
     
-      <div className="container h-screen flex flex-col justify-center px-6 py-4 max-w-3xl mx-auto">
+      <div className="container h-screen flex flex-col justify-center px-6 py-4 max-w-3xl mx-auto pb-10">
         <div className="block w-full mt-4 mx-auto mb-10 md:w-3/4">
           <Link
             to="./"
@@ -59,8 +61,8 @@ const SignUp = () => {
             className="border-2 px-2 py-2 rounded-lg"
             required
           />
-          <button className="text-white border-transparent border-2 px-4 py-2 rounded-lg bg-red-600 mt-6">
-            Create Account
+          <button className="text-white border-transparent border-2 px-4 py-2 rounded-lg bg-red-600 mt-6 hover:bg-red-300" disabled={isPending}>
+            { isPending ? "Creating..." : "Create" }
           </button>
         </form>
       </div>
